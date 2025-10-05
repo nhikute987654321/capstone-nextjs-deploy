@@ -1,74 +1,73 @@
-import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { toast, ToastContainer } from "react-toastify";
-import { deleteRoom, loadRoomsPagination, setPagination } from "./slice";
-import Pagination from "../../Pagination/Pagination";
-import type { AppDispatch } from "../../../store";
-import ConfirmDeleteDialog from "../../ConfirmDialog/ConfirmDialog";
-import type { Room } from "../../types/Room";
+import { useEffect, useState } from "react"
+import { NavLink } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { toast, ToastContainer } from "react-toastify"
+import { deleteRoom, loadRoomsPagination, setPagination } from "./slice"
+import Pagination from "../../Pagination/Pagination"
+import type { AppDispatch } from "../../../store"
+import ConfirmDeleteDialog from "../../ConfirmDialog/ConfirmDialog"
+import type { Room } from "../../types/Room"
 
 export default function Rooms() {
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>()
 
-  const { loading, rooms, error, success, pagination } = useSelector((state: any) => state.admRooms);
-  const [textSearch, setTextSearch] = useState('');
+  const { rooms, error, success, pagination } = useSelector((state: any) => state.admRooms)
+  const [textSearch, setTextSearch] = useState('')
 
-  const [pageIndex, setPageIndex] = useState<number>(pagination.pageIndex);
+  const [pageIndex, setPageIndex] = useState<number>(pagination.pageIndex)
 
   useEffect(() => {
-    console.log("loadRoomsPagination ", pageIndex);
-    dispatch(loadRoomsPagination(pagination));
-  }, [pagination?.pageIndex, pagination?.keyword]);
+    console.log("loadRoomsPagination ", pageIndex)
+    dispatch(loadRoomsPagination(pagination))
+  }, [pagination?.pageIndex, pagination?.keyword])
 
   useEffect(() => {
     if (error) {
       if (success) {
-        toast.success(error);
-        dispatch(loadRoomsPagination(pagination));
+        toast.success(error)
+        dispatch(loadRoomsPagination(pagination))
       } else
         toast.error(error)
     }
-  }, [error]);
+  }, [error])
 
   useEffect(() => {
-    console.log("page changed ", pageIndex);
+    console.log("page changed ", pageIndex)
     if (pagination) {
-      dispatch(setPagination({ pageIndex, keyword: textSearch }));
+      dispatch(setPagination({ pageIndex, keyword: textSearch }))
     }
-  }, [pageIndex]);
+  }, [pageIndex])
 
   useEffect(() => {
-    console.log("page changed ", pageIndex);
+    console.log("page changed ", pageIndex)
     if (pagination) {
-      dispatch(setPagination({ pageIndex: 1, keyword: textSearch }));
+      dispatch(setPagination({ pageIndex: 1, keyword: textSearch }))
     }
-  }, [textSearch]);
+  }, [textSearch])
 
   const searchByKeywords = () => {
-    dispatch(setPagination({ pageIndex: 1, keyword: textSearch }));
+    dispatch(setPagination({ pageIndex: 1, keyword: textSearch }))
   }
 
 
-  const [openDialog, setOpenDialog] = useState(false);
-  const [room, setRoom] = useState<Room | null>(null);
+  const [openDialog, setOpenDialog] = useState(false)
+  const [room, setRoom] = useState<Room | null>(null)
   const handleOpenDialog = (data: Room, e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setRoom(data);
-    setOpenDialog(true);
+    e.preventDefault()
+    setRoom(data)
+    setOpenDialog(true)
   }
 
   const closeDialog = () => {
-    setOpenDialog(false);
-  };
+    setOpenDialog(false)
+  }
 
   const handleDelete = () => {
-    console.log("handleDelete:: ", room);
-    if (!room) return;
-    dispatch(deleteRoom(room?.id));
-    setOpenDialog(false);
-    setRoom(null);
+    console.log("handleDelete:: ", room)
+    if (!room) return
+    dispatch(deleteRoom(room?.id))
+    setOpenDialog(false)
+    setRoom(null)
   }
 
   return (
@@ -173,5 +172,5 @@ export default function Rooms() {
       <ConfirmDeleteDialog open={openDialog} onClose={closeDialog} onConfirm={handleDelete} itemName={room?.tenPhong} />
       <ToastContainer />
     </div>
-  );
+  )
 }

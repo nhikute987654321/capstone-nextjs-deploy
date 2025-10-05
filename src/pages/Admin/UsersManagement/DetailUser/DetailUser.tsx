@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   convertToISODate,
@@ -20,7 +20,7 @@ export default function DetailUser() {
 
   const [bookRoomsData, setBookRoomsData] = useState<any>([])
 
-  const [action, setAction] = useState('chitiet');
+  const [action] = useState('chitiet');
   const { id } = useParams<{ id: string }>()
   useEffect(() => {
     if (id) {

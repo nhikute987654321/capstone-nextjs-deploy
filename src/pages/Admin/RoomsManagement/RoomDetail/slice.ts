@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../../../services/api";
-import type { RoomResponse, RoomFormData, Room, EditFormData } from "../../types/Room";
+import type { RoomResponse } from "../../types/Room";
 
 interface RoomState {
     loading: boolean;

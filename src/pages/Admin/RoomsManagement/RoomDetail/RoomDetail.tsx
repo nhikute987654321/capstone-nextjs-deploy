@@ -78,7 +78,6 @@ export default function RoomAdminDetail() {
 
   const {
     register,
-    handleSubmit,
     reset,
     formState: { errors },
   } = useForm<RoomFormData>({

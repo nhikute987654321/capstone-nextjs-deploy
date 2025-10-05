@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type FormEvent } from "react"
+import { useEffect } from "react"
 import z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -67,7 +67,7 @@ export default function EditRoom() {
   const { id } = useParams<{ id: string }>()
   const dispatch = useDispatch<AppDispatch>()
 
-  const { loading, room, message, success } = useSelector((state: any) => state.admEditRoom)
+  const { room, message, success } = useSelector((state: any) => state.admEditRoom)
 
   useEffect(() => {
     if (id) {
