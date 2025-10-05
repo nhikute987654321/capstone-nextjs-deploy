@@ -8,6 +8,7 @@ import { fetchAllRooms } from '../Rooms/slice'
 import { fetchAllUsers } from '../../UsersManagement/Users/slice'
 import { toast, ToastContainer } from "react-toastify"
 import { bookRoom, clearError } from './slice'
+import { fetchAllLocations } from '../../LocationsManagment/Locations/slice'
 // const useQuery = () => new URLSearchParams(useLocation().search)
 
 
@@ -23,16 +24,13 @@ export type BookingFormValues = z.infer<typeof bookingSchema>
 
 export default function BookRoom() {
 
-    // const query = useQuery()
-    // const id = query.get('id')
-    // alert(id + ' ---- id from params .....')
     const dispatch = useDispatch<AppDispatch>()
-    // const navigate = useNavigate()
     const { room } = useSelector((state: any) => state.admDetailRoom)
 
     const { rooms } = useSelector((state: any) => state.admRooms)
     const { usersFilter } = useSelector((state: any) => state.admUsers)
-    const { message, success } = useSelector((state: any) => state.admBookRoom)
+    const { message, success} = useSelector((state: any) => state.admBookRoom)
+
     const [image, setImage] = useState("")
 
     useEffect(() => {
@@ -54,6 +52,7 @@ export default function BookRoom() {
     useEffect(() => {
         dispatch(fetchAllRooms())
         dispatch(fetchAllUsers())
+        dispatch(fetchAllLocations())
     }, [])
 
     const {

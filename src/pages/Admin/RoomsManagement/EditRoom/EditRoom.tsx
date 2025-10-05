@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { editRoom, clearError, fetchRoomById } from "./slice"
 import type { AppDispatch } from "../../../store"
 import { useParams } from "react-router-dom"
+import { fetchAllLocations } from "../../LocationsManagment/Locations/slice"
 
 export const roomSchema = z.object({
   tenPhong: z.string().min(1, "Tên phòng không được để trống"),
@@ -68,10 +69,12 @@ export default function EditRoom() {
   const dispatch = useDispatch<AppDispatch>()
 
   const { room, message, success } = useSelector((state: any) => state.admEditRoom)
+  const { locations } = useSelector((state: any) => state.admLocations)
 
   useEffect(() => {
     if (id) {
       dispatch(fetchRoomById(id))
+      dispatch(fetchAllLocations())
     }
   }, [id])
 
@@ -224,14 +227,23 @@ export default function EditRoom() {
           </div>
           <div>
             <label htmlFor="maViTri" className="block font-medium mb-1 text-gray-700">
-              Mã vị trí
+              Vị trí
             </label>
-            <input
-              id="maViTri"
-              type="number"
-              {...register("maViTri", { valueAsNumber: true })}
-              className="w-full border border-gray-300 rounded px-4 py-2"
-            />
+            <select
+              {...register('maViTri', { valueAsNumber: true, required: "Vui lòng chọn Vị trí" })}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              <option value="0">-- Chọn vị trí --</option>
+              {locations && Array.isArray(locations) && locations.map((r: any) => (
+                <option key={r.id} value={r.id}>
+                  {r.tenViTri}
+                </option>
+              ))}
+            </select>
+            {errors.maViTri && (
+              <p className="text-sm text-red-500 mt-1">{errors.maViTri.message}</p>
+            )}
+
           </div>
         </div>
 

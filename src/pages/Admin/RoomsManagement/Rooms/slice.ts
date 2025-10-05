@@ -9,7 +9,8 @@ interface RoomPaginationState {
     rooms: any | null
     error: string | null
     success: boolean | null
-    pagination: Pagination | null
+    pagination: Pagination | null,
+    locations: any | null
 }
 
 const initialState: RoomPaginationState = {
@@ -17,7 +18,8 @@ const initialState: RoomPaginationState = {
     rooms: null,
     error: null,
     success: false,
-    pagination: defaultPagination
+    pagination: defaultPagination,
+    locations: null
 }
 
 export const fetchAllRooms = createAsyncThunk<RoomResponse, void, { rejectValue: string }>(

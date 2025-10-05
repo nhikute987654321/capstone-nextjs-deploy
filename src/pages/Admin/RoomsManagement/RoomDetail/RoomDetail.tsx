@@ -1,13 +1,14 @@
-import { useEffect } from "react";
-import z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast, ToastContainer } from "react-toastify";
-import type { RoomFormData } from "../../types/Room";
-import { useDispatch, useSelector } from "react-redux";
-import { clearError, fetchRoomById } from "./slice";
-import type { AppDispatch } from "../../../store";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react"
+import z from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { toast, ToastContainer } from "react-toastify"
+import type { RoomFormData } from "../../types/Room"
+import { useDispatch, useSelector } from "react-redux"
+import { clearError, fetchRoomById } from "./slice"
+import type { AppDispatch } from "../../../store"
+import { useNavigate, useParams } from "react-router-dom"
+import { fetchAllLocations } from "../../LocationsManagment/Locations/slice"
 
 export const roomSchema = z.object({
   tenPhong: z.string().min(1, "Tên phòng không được để trống"),
@@ -28,7 +29,7 @@ export const roomSchema = z.object({
   banUi: z.boolean(),
   maViTri: z.number().min(1, "Mã vị trí không hợp lệ"),
   hinhAnh: z.string().url("URL hình ảnh không hợp lệ"),
-});
+})
 
 const amenities: { value: keyof RoomFormData; name: string }[] = [
   { value: "mayGiat", name: "Máy Giặt" },
@@ -40,7 +41,7 @@ const amenities: { value: keyof RoomFormData; name: string }[] = [
   { value: "doXe", name: "Đỗ Xe" },
   { value: "hoBoi", name: "Hồ Bơi" },
   { value: "banUi", name: "Bàn Ủi" },
-];
+]
 
 const defaultValues = {
   tenPhong: "",
@@ -64,17 +65,21 @@ const defaultValues = {
 }
 
 export default function RoomAdminDetail() {
-  const { id } = useParams<{ id: string }>();
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>()
+  const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
 
-  const { room, message, success } = useSelector((state: any) => state.admDetailRoom);
+  const { room, message, success } = useSelector((state: any) => state.admDetailRoom)
 
+
+  const { locations } = useSelector((state: any) => state.admLocations)
+  
   useEffect(() => {
     if (id) {
-      dispatch(fetchRoomById(id));
+      dispatch(fetchRoomById(id))
+         dispatch(fetchAllLocations())
     }
-  }, [id]);
+  }, [id])
 
   const {
     register,
@@ -83,7 +88,7 @@ export default function RoomAdminDetail() {
   } = useForm<RoomFormData>({
     resolver: zodResolver(roomSchema),
     defaultValues: defaultValues,
-  });
+  })
 
   useEffect(() => {
     if (room) {
@@ -106,34 +111,34 @@ export default function RoomAdminDetail() {
         doXe: room.doXe,
         hoBoi: room.hoBoi,
         banUi: room.banUi,
-      });
+      })
 
-      console.log("Fill Room :", room);
+      console.log("Fill Room :", room)
     }
-  }, [room, reset]);
+  }, [room, reset])
 
   useEffect(() => {
     if (message) {
       if (success) {
-        toast.success(message);
-        resetForm();
+        toast.success(message)
+        resetForm()
       } else
-        toast.error(message);
+        toast.error(message)
     }
-  }, [success, message]);
+  }, [success, message])
 
 
   const resetForm = () => {
-    clearError();
-    reset(defaultValues);
+    clearError()
+    reset(defaultValues)
   }
 
   const back = () => {
-    window.history.back();
+    window.history.back()
   }
 
   const gotoBookRoom = () => {
-    navigate(`/admin/book-room`);//?id=${id}
+    navigate(`/admin/book-room`)//?id=${id}
   }
 
   return (
@@ -216,21 +221,26 @@ export default function RoomAdminDetail() {
                 id="giaTien"
                 type="number"
                 {...register("giaTien", { valueAsNumber: true })}
-                disabled
+                readOnly
                 className="w-full border border-gray-300 rounded px-4 py-2 bg-gray-100 text-gray-500 cursor-not-allowed"
               />
             </div>
             <div>
               <label htmlFor="maViTri" className="block font-medium mb-1 text-gray-700">
-                Mã vị trí
+                Vị trí
               </label>
-              <input
-                id="maViTri"
-                type="number"
-                {...register("maViTri", { valueAsNumber: true })}
+              <select
+                {...register('maViTri', { valueAsNumber: true, required: "Vui lòng chọn Vị trí" })}
                 disabled
-                className="w-full border border-gray-300 rounded px-4 py-2 bg-gray-100 text-gray-500 cursor-not-allowed"
-              />
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100"
+              >
+                <option value="0">-- Chọn vị trí --</option>
+                {locations && Array.isArray(locations) && locations.map((r: any) => (
+                  <option key={r.id} value={r.id}>
+                    {r.tenViTri}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -305,7 +315,7 @@ export default function RoomAdminDetail() {
               onClick={back}
               className="cursor-pointer bg-orange-300 text-white px-6 py-2 rounded hover:bg-orange-400 transition"
             >
-             <b>Quay lại</b>
+              <b>Quay lại</b>
             </button>
           </div>
         </form>
@@ -323,5 +333,5 @@ export default function RoomAdminDetail() {
       </div>
       <ToastContainer />
     </div>
-  );
+  )
 }

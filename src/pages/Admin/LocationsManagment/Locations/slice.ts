@@ -158,7 +158,7 @@ const locationSlice = createSlice({
         state.loading = true
       })
       .addCase(fetchAllLocations.fulfilled, (state, action) => {
-        state.location = action.payload.content
+        state.locations = action.payload.content
         state.locationsFilter = action.payload.content
         state.status = 'succeeded'
         state.loading = false

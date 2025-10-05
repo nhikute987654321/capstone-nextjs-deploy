@@ -102,10 +102,6 @@ export default function FormUser({ form, setForm, handleChange, handleOnAddNew, 
             />
           </div>
 
-
-
-
-
           {/* Giới tính */}
           <div className="flex flex-col">
             <label htmlFor="gender" className="mb-1 text-sm font-medium text-gray-700">Giới tính</label>

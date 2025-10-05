@@ -1,12 +1,13 @@
-import { useEffect } from "react";
-import z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast, ToastContainer } from "react-toastify";
-import type { RoomFormData } from "../../types/Room";
-import { useDispatch, useSelector } from "react-redux";
-import { addRoom, clearError } from "./slice";
-import type { AppDispatch } from "../../../store";
+import { useEffect } from "react"
+import z from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { toast, ToastContainer } from "react-toastify"
+import type { RoomFormData } from "../../types/Room"
+import { useDispatch, useSelector } from "react-redux"
+import { addRoom, clearError } from "./slice"
+import type { AppDispatch } from "../../../store"
+import { fetchAllLocations } from "../../LocationsManagment/Locations/slice"
 
 export const roomSchema = z.object({
   tenPhong: z.string().min(1, "Tên phòng không được để trống"),
@@ -27,9 +28,9 @@ export const roomSchema = z.object({
   banUi: z.boolean(),
   maViTri: z.number().min(1, "Mã vị trí không hợp lệ"),
   hinhAnh: z.string().url("URL hình ảnh không hợp lệ"),
-});
+})
 
-const amenities: { value: keyof RoomFormData; name: string }[] = [
+const amenities: { value: keyof RoomFormData, name: string }[] = [
   { value: "mayGiat", name: "Máy Giặt" },
   { value: "banLa", name: "Bàn Là" },
   { value: "tivi", name: "Tivi" },
@@ -39,7 +40,7 @@ const amenities: { value: keyof RoomFormData; name: string }[] = [
   { value: "doXe", name: "Đỗ Xe" },
   { value: "hoBoi", name: "Hồ Bơi" },
   { value: "banUi", name: "Bàn Ủi" },
-];
+]
 
 const defaultValues = {
   tenPhong: "",
@@ -64,9 +65,10 @@ const defaultValues = {
 
 export default function AddRoom() {
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>()
 
-  const { message, success } = useSelector((state: any) => state.admRoom);
+  const { message, success } = useSelector((state: any) => state.admRoom)
+  const { locations } = useSelector((state: any) => state.admLocations)
 
   const {
     register,
@@ -77,33 +79,37 @@ export default function AddRoom() {
   } = useForm<RoomFormData>({
     resolver: zodResolver(roomSchema),
     defaultValues: defaultValues,
-  });
+  })
 
   const hinhAnh = watch("hinhAnh")
-  
+
+   useEffect(() => {
+    dispatch(fetchAllLocations())
+  }, [])
+
   useEffect(() => {
     if (message) {
       if (success) {
-        toast.success(message);
-        resetForm();
+        toast.success(message)
+        resetForm()
       } else
-        toast.error(message);
+        toast.error(message)
     }
-    dispatch(clearError());
-  }, [success, message]);
+    dispatch(clearError())
+  }, [success, message])
 
   const onSubmit = (data: RoomFormData) => {
-    console.log("Submitted Room:", data);
-    dispatch(addRoom(data));
-  };
+    console.log("Submitted Room:", data)
+    dispatch(addRoom(data))
+  }
 
   const resetForm = () => {
-    clearError();
-    reset(defaultValues);
+    clearError()
+    reset(defaultValues)
   }
 
   const back = () => {
-    window.history.back();
+    window.history.back()
   }
 
   return (
@@ -190,14 +196,35 @@ export default function AddRoom() {
           </div>
           <div>
             <label htmlFor="maViTri" className="block font-medium mb-1 text-gray-700">
-              Mã vị trí
+              Vị trí
             </label>
-            <input
+
+            <select
+              {...register('maViTri', { valueAsNumber: true, required: "Vui lòng chọn Vị trí" })}
+              // onChange={(e) => {
+              //   handleChangeRooms(e)
+              // }}
+              // value={room?.id}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              <option value="0">-- Chọn vị trí --</option>
+              {locations && Array.isArray(locations) && locations.map((r: any) => (
+                <option key={r.id} value={r.id}>
+                  {r.tenViTri}
+                </option>
+              ))}
+            </select>
+            {errors.maViTri && (
+              <p className="text-sm text-red-500 mt-1">{errors.maViTri.message}</p>
+            )}
+
+            {/* <input
               id="maViTri"
               type="number"
               {...register("maViTri", { valueAsNumber: true })}
               className="w-full border border-gray-300 rounded px-4 py-2"
-            />
+            /> */}
+
           </div>
         </div>
 
@@ -284,5 +311,5 @@ export default function AddRoom() {
       </form>
       <ToastContainer />
     </div>
-  );
+  )
 }
