@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { NavLink, Outlet} from 'react-router-dom';
 import Topbar from './_components/Topbar';
 import Sidebar from './_components/Sidebar';
 import { useSelector } from 'react-redux';
@@ -7,7 +7,6 @@ import type { RootState } from '../store';
 
 const AdminTemplate: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.login);
-  const navigate = useNavigate();
 
   // Optional auto-redirect:
   // useEffect(() => {
