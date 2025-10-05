@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast, ToastContainer } from "react-toastify";
 import type { RoomFormData } from "../../types/Room";
 import { useDispatch, useSelector } from "react-redux";
-import { addRoom, clearError, resetRoom } from "./slice";
+import { addRoom, clearError } from "./slice";
 import type { AppDispatch } from "../../../store";
 
 export const roomSchema = z.object({
@@ -66,7 +66,7 @@ export default function AddRoom() {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { loading, room, message, success } = useSelector((state: any) => state.admRoom);
+  const { message, success } = useSelector((state: any) => state.admRoom);
 
   const {
     register,

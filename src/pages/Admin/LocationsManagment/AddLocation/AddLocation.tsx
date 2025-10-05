@@ -42,12 +42,8 @@ export default function AddLocation() {
         }
     }, [error, success])
 
-    const back = () => {
-        window.history.back()
-    }
-
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type } = e.target
+        const { name, value } = e.target
         let val: string | number = value
 
         setForm({ ...form, [name]: val })

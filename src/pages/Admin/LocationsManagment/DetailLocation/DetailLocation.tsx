@@ -14,8 +14,6 @@ import { CHI_TIET } from '../../types/Constant'
 export default function DetailLocation() {
   const dispatch: AppDispatch = useDispatch()
   const { error, success, location } = useSelector((state: RootState) => state.admLocations)
-  const { bookRooms } = useSelector((state: RootState) => state.admBookRoom)
-  const { rooms } = useSelector((state: RootState) => state.admRooms)
 
   const [action] = useState(CHI_TIET)
 
@@ -26,18 +24,6 @@ export default function DetailLocation() {
       dispatch(fetchLocationById(Number(id)))
     }
   }, [id])
-
-  useEffect(() => {
-    if (bookRooms && rooms) {
-      const data = bookRooms.map((booking) => {
-        const room = rooms.find((s: any) => Number(s.id) === Number(booking.maPhong))
-        if (room)
-          return { ...booking, tenPhong: room.tenPhong }
-        else
-          return booking
-      })
-    }
-  }, [bookRooms, rooms])
 
   const [form, setForm] = useState<LocationForm>({
     tenViTri: '',

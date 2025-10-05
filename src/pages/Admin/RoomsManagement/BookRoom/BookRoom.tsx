@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useParams } from 'react-router-dom';
-import type { AppDispatch } from '../../../store';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchRoomById } from '../RoomDetail/slice';
-import { fetchAllRooms } from '../Rooms/slice';
-import { fetchAllUsers } from '../../UsersManagement/Users/slice';
-import { toast, ToastContainer } from "react-toastify";
-import { bookRoom, clearError } from './slice';
-import { useLocation } from 'react-router-dom';
-const useQuery = () => new URLSearchParams(useLocation().search);
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import type { AppDispatch } from '../../../store'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchAllRooms } from '../Rooms/slice'
+import { fetchAllUsers } from '../../UsersManagement/Users/slice'
+import { toast, ToastContainer } from "react-toastify"
+import { bookRoom, clearError } from './slice'
+// const useQuery = () => new URLSearchParams(useLocation().search)
 
 
 export const bookingSchema = z.object({
@@ -20,44 +17,44 @@ export const bookingSchema = z.object({
     ngayDi: z.string().min(1, 'Vui lòng chọn ngày đi'),
     soLuongKhach: z.number().min(1, 'Phải có ít nhất 1 khách'),
     maNguoiDung: z.number().min(1, 'Mã người dùng là bắt buộc')
-});
+})
 
-export type BookingFormValues = z.infer<typeof bookingSchema>;
+export type BookingFormValues = z.infer<typeof bookingSchema>
 
 export default function BookRoom() {
 
-    // const query = useQuery();
-    // const id = query.get('id');
-    // alert(id + ' ---- id from params .....');
-    const dispatch = useDispatch<AppDispatch>();
-    // const navigate = useNavigate();
-    const { room } = useSelector((state: any) => state.admDetailRoom);
+    // const query = useQuery()
+    // const id = query.get('id')
+    // alert(id + ' ---- id from params .....')
+    const dispatch = useDispatch<AppDispatch>()
+    // const navigate = useNavigate()
+    const { room } = useSelector((state: any) => state.admDetailRoom)
 
-    const { rooms } = useSelector((state: any) => state.admRooms);
-    const { users, usersFilter } = useSelector((state: any) => state.admUsers);
-    const { message, success } = useSelector((state: any) => state.admBookRoom);
-    const [image, setImage] = useState("");
+    const { rooms } = useSelector((state: any) => state.admRooms)
+    const { usersFilter } = useSelector((state: any) => state.admUsers)
+    const { message, success } = useSelector((state: any) => state.admBookRoom)
+    const [image, setImage] = useState("")
 
     useEffect(() => {
         if (message) {
             if (success) {
-                toast.success(message);
-                reset();
+                toast.success(message)
+                reset()
             } else
-                toast.error(message);
+                toast.error(message)
         }
-        dispatch(clearError());
-    }, [success, message]);
+        dispatch(clearError())
+    }, [success, message])
     // useEffect(() => {
     //     if (id) {
-    //         dispatch(fetchRoomById(id));
+    //         dispatch(fetchRoomById(id))
     //     }
-    // }, [id]);
+    // }, [id])
 
     useEffect(() => {
-        dispatch(fetchAllRooms());
-        dispatch(fetchAllUsers());
-    }, []);
+        dispatch(fetchAllRooms())
+        dispatch(fetchAllUsers())
+    }, [])
 
     const {
         register,
@@ -74,7 +71,7 @@ export default function BookRoom() {
             soLuongKhach: 1,
             maNguoiDung: 0
         }
-    });
+    })
 
     // Khi room chi tiết load set mặc định
     useEffect(() => {
@@ -87,9 +84,9 @@ export default function BookRoom() {
                 ngayDi: '',
                 soLuongKhach: 1,
                 maNguoiDung: 0
-            });
+            })
             if (room.hinhAnh) {
-                setImage(room.hinhAnh);
+                setImage(room.hinhAnh)
             }
         } else {
             reset({
@@ -98,34 +95,34 @@ export default function BookRoom() {
                 ngayDi: '',
                 soLuongKhach: 1,
                 maNguoiDung: 0
-            });
+            })
             if (rooms[0].hinhAnh) {
-                setImage(rooms[0].hinhAnh);
+                setImage(rooms[0].hinhAnh)
             }
         }
-    }, [room, reset]);
+    }, [room, reset])
 
     const onSubmit = (data: BookingFormValues) => {
-        console.log('Dữ liệu đặt phòng:', data);
+        console.log('Dữ liệu đặt phòng:', data)
         dispatch(bookRoom(data))
-    };
+    }
 
     const handleChangeRooms = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedId = Number(e.target.value);
+        const selectedId = Number(e.target.value)
         if (!isNaN(selectedId) && selectedId > 0) {
-            setValue('maPhong', selectedId, { shouldValidate: true, shouldDirty: true });
+            setValue('maPhong', selectedId, { shouldValidate: true, shouldDirty: true })
 
-            const selectedRoom = rooms.find((r: any) => r.id === selectedId);
+            const selectedRoom = rooms.find((r: any) => r.id === selectedId)
             if (selectedRoom && selectedRoom.hinhAnh) {
-                setImage(selectedRoom.hinhAnh);
+                setImage(selectedRoom.hinhAnh)
             } else {
-                setImage("");
+                setImage("")
             }
         } else {
-            setImage("");
-            setValue('maPhong', 0, { shouldValidate: true, shouldDirty: true });
+            setImage("")
+            setValue('maPhong', 0, { shouldValidate: true, shouldDirty: true })
         }
-    };
+    }
 
     return (
         <div className="mx-auto mt-10 max-w-full bg-white px-10 pb-20 rounded shadow ">
@@ -139,7 +136,7 @@ export default function BookRoom() {
                         <select
                             {...register('maPhong', { valueAsNumber: true, required: "Vui lòng chọn phòng" })}
                             onChange={(e) => {
-                                handleChangeRooms(e);
+                                handleChangeRooms(e)
                             }}
                             value={room?.id}
                             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
@@ -202,7 +199,7 @@ export default function BookRoom() {
                         <select
                             {...register('maNguoiDung', { valueAsNumber: true, required: "Vui lòng chọn người dùng" })}
                             // onChange={(e) => {
-                            //     handleChangeRooms(e);
+                            //     handleChangeRooms(e)
                             // }}
                             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                         >
@@ -239,5 +236,5 @@ export default function BookRoom() {
             </div>
             <ToastContainer />
         </div>
-    );
-};
+    )
+}

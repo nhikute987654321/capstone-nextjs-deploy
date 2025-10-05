@@ -16,7 +16,6 @@ type Props = {
 
 export default function FormLocation({
   form,
-  setForm,
   handleChange,
   handleOnAddNew,
   handleOnEdit,
