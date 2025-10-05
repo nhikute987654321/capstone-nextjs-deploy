@@ -17,7 +17,7 @@ const userSchema = z.object({
     email: z.string().email('Email không đúng định dạng'),
     phone: z.string().regex(/^\d{10}$/, 'Số điện thoại phải có 10 chữ số'),
     birthday: z.string().nonempty('Ngày sinh không được để trống'),
-    avatar: z.string().url('Ảnh đại diện phải là một URL hợp lệ').optional(),
+    // avatar: z.string().url('Ảnh đại diện phải là một URL hợp lệ').optional(),
     gender: z.boolean(),
     role: z.enum(['ADMIN', 'USER']).or(z.string().nonempty('Vai trò không được để trống')),
 })
@@ -34,7 +34,7 @@ export default function AddUser() {
         email: '',
         phone: '',
         birthday: '',
-        avatar: '',
+        // avatar: '',
         gender: true,
         role: '',
     })
@@ -69,7 +69,7 @@ export default function AddUser() {
             email: '',
             phone: '',
             birthday: '',
-            avatar: '',
+            // avatar: '',
             gender: true,
             role: '',
         })
