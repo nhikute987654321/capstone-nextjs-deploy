@@ -134,8 +134,9 @@ export const delUsers = createAsyncThunk<UsersAPIResponse<any>, number>(
 )
 
 export const convertToISODate = (date:string) => {
-  const [day, month, year] = date.split("/")
-  return `${year}-${ String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`
+return date
+  // const [day, month, year] = date.split("/")
+  // return `${year}-${ String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`
 }
 
 // ==============================

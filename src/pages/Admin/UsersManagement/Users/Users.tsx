@@ -37,7 +37,6 @@ export default function Users() {
     dispatch(fetchUsersByPagination(userPagination))
   }, [userPagination?.pageIndex, userPagination?.keyword])
 
-
   useEffect(() => {
     console.log("Data into error:: " + error)
     if (error) {
