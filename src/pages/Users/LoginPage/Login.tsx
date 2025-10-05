@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { loginUser, clearError } from './slice';
 import type { AppDispatch } from '../../store';
+import { ADMIN } from '../../Admin/types/Constant';
 
 type LoginForm = {
     email: string;
@@ -33,6 +34,16 @@ function Login() {
 
     useEffect(() => {
         if (isAuthenticated) {
+            const userInfo = localStorage.getItem('auth_user');
+            console.log(userInfo,'userInfo')
+            if(userInfo){
+                const user = JSON.parse(userInfo);
+                console.log(user,'data userInfo')
+                if(user?.role == ADMIN){
+                    navigate('/admin/rooms');
+                    return
+                }
+            }
             const redirect = params.get('redirect');
             // If there is a pending booking, auto-complete it
             const pendingStr = localStorage.getItem('pendingBooking');
