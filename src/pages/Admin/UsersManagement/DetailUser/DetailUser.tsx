@@ -1,45 +1,43 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   convertToISODate,
   fetchUserById,
   resetState,
-} from '../Users/slice';
-import { toast, ToastContainer } from 'react-toastify';
-import { type RootState, type AppDispatch } from '../../../store';
-import type { UserForm } from "../../types/Users";
-import FormUser from '../FormUser/FormUser';
-import { useParams } from 'react-router-dom';
-import { getBookRoomByUser } from '../../RoomsManagement/BookRoom/slice';
+} from '../Users/slice'
+import { toast, ToastContainer } from 'react-toastify'
+import { type RootState, type AppDispatch } from '../../../store'
+import type { UserForm } from "../../types/Users"
+import FormUser from '../FormUser/FormUser'
+import { useParams } from 'react-router-dom'
+import { getBookRoomByUser } from '../../RoomsManagement/BookRoom/slice'
 
 export default function DetailUser() {
-  const dispatch: AppDispatch = useDispatch();
-  const { error, success, user } = useSelector((state: RootState) => state.admUsers);
-  const { bookRooms } = useSelector((state: RootState) => state.admBookRoom);
-  const { rooms } = useSelector((state: RootState) => state.admRooms);
+  const dispatch: AppDispatch = useDispatch()
+  const { error, success, user } = useSelector((state: RootState) => state.admUsers)
+  const { bookRooms } = useSelector((state: RootState) => state.admBookRoom)
+  const { rooms } = useSelector((state: RootState) => state.admRooms)
 
   const [bookRoomsData, setBookRoomsData] = useState<any>([])
 
-  const [action] = useState('chitiet');
+  const [action] = useState('chitiet')
   const { id } = useParams<{ id: string }>()
   useEffect(() => {
     if (id) {
-      dispatch(fetchUserById(id));
+      dispatch(fetchUserById(id))
       dispatch(getBookRoomByUser(Number(id)))
       if (bookRooms && rooms) {
         const data = bookRooms.map((booking) => {
           const room = rooms.find((s: any) => Number(s.id) === Number(booking.maPhong))
-          console.log(room, 'booking.maPhong --' + booking.maPhong)
           if (room)
             return { ...booking, tenPhong: room.tenPhong }
           else
             return booking
         })
-        console.log(data, 'datadatadatadatadatadata')
         setBookRoomsData(data)
       }
     }
-  }, [id]);
+  }, [id])
 
   useEffect(() => {
     if (id) {
@@ -47,17 +45,15 @@ export default function DetailUser() {
         const data = bookRooms.map((booking) => {
 
           const room = rooms.find((s: any) => Number(s.id) === Number(booking.maPhong))
-          console.log(room, 'booking.maPhong --' + booking.maPhong)
           if (room)
             return { ...booking, tenPhong: room.tenPhong }
           else
             return booking
         })
-        console.log(data, 'datadatadatadatadatadata')
         setBookRoomsData(data)
       }
     }
-  }, [bookRooms, rooms]);
+  }, [bookRooms, rooms])
 
   const [form, setForm] = useState<UserForm>({
     name: '',
@@ -68,7 +64,7 @@ export default function DetailUser() {
     avatar: '',
     gender: true,
     role: '',
-  });
+  })
 
   useEffect(() => {
     if (user) {
@@ -81,18 +77,18 @@ export default function DetailUser() {
         avatar: user.avatar || '',
         gender: user.gender ?? true,
         role: user.role || '',
-      });
+      })
     }
-  }, [user]);
+  }, [user])
 
   useEffect(() => {
     if (success && error !== '') {
-      toast.success(error);
+      toast.success(error)
     } else if (error !== '') {
-      toast.error(error);
+      toast.error(error)
     }
-    dispatch(resetState());
-  }, [error, success]);
+    dispatch(resetState())
+  }, [error, success])
   return (
     <div>
       <FormUser form={form} setForm={setForm} handleChange={() => { }} handleOnAddNew={() => { }} handleOnEdit={() => { }} action={action} title='Chi tiết user' resetForm={() => { }} />

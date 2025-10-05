@@ -1,70 +1,73 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Pagination from "../../Pagination/Pagination";
-import ConfirmDeleteDialog from "../../ConfirmDialog/ConfirmDialog";
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import Pagination from "../../Pagination/Pagination"
+import ConfirmDeleteDialog from "../../ConfirmDialog/ConfirmDialog"
 import {
   resetState,
   delUsers,
   fetchUsersByPagination,
   setUserPagination,
-} from './slice';
-import { toast, ToastContainer } from 'react-toastify';
-import { type RootState, type AppDispatch } from '../../../store';
-import type { User } from "../../types/Users";
-import { NavLink } from 'react-router-dom';
+} from './slice'
+import { toast, ToastContainer } from "react-toastify"
+import { type RootState, type AppDispatch } from '../../../store'
+import type { User } from "../../types/Users"
+import { NavLink } from 'react-router-dom'
 
 export default function Users() {
-  const dispatch: AppDispatch = useDispatch();
-  const { error, success, loading, usersFilter, userPagination } = useSelector((state: RootState) => state.admUsers);
-  const [textSearch, setTextSearch] = useState('');
-  const [pageIndex, setPageIndex] = useState<number>(userPagination.pageIndex);
+  const dispatch: AppDispatch = useDispatch()
+  const { error, success, loading, usersFilter, userPagination } = useSelector((state: RootState) => state.admUsers)
+  const [textSearch, setTextSearch] = useState('')
+  const [pageIndex, setPageIndex] = useState<number>(userPagination.pageIndex)
 
   useEffect(() => {
-    resetState();
-  }, []);
-
-  useEffect(() => {
-    if (userPagination)
-      dispatch(setUserPagination({ pageIndex: 1, keyword: textSearch }));
-  }, [textSearch]);
+    resetState()
+  }, [])
 
   useEffect(() => {
     if (userPagination)
-      dispatch(setUserPagination({ pageIndex, keyword: textSearch }));
-  }, [pageIndex]);
+      dispatch(setUserPagination({ pageIndex: 1, keyword: textSearch }))
+  }, [textSearch])
 
   useEffect(() => {
-    dispatch(fetchUsersByPagination(userPagination));
-  }, [userPagination?.pageIndex, userPagination?.keyword]);
+    if (userPagination)
+      dispatch(setUserPagination({ pageIndex, keyword: textSearch }))
+  }, [pageIndex])
 
   useEffect(() => {
-    if (success && error !== '') {
-      toast.success(error);
-    } else if (error !== '') {
-      toast.error(error);
+    dispatch(fetchUsersByPagination(userPagination))
+  }, [userPagination?.pageIndex, userPagination?.keyword])
+
+
+  useEffect(() => {
+    console.log("Data into error:: " + error)
+    if (error) {
+      if (success) {
+        toast.success(error)
+        dispatch(resetState())
+      } else
+        toast.error(error)
     }
-    dispatch(resetState());
-  }, [error, success]);
+  }, [error])
 
-  const [openDialog, setOpenDialog] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [openDialog, setOpenDialog] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
   const handleOpenDialog = (data: User, e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setUser(data);
-    setOpenDialog(true);
+    e.preventDefault()
+    setUser(data)
+    setOpenDialog(true)
   }
 
   const closeDialog = () => {
-    setOpenDialog(false);
-  };
+    setOpenDialog(false)
+  }
 
   const handleOnDelete = async () => {
-    if (!user) return;
-    await dispatch(delUsers(user.id));
-    dispatch(fetchUsersByPagination(userPagination));
-    setOpenDialog(false);
-    setUser(null);
-  };
+    if (!user) return
+    await dispatch(delUsers(user.id))
+    dispatch(fetchUsersByPagination(userPagination))
+    setOpenDialog(false)
+    setUser(null)
+  }
 
   return (
     <div className="p-6 max-w-full ">
@@ -156,5 +159,5 @@ export default function Users() {
       <ConfirmDeleteDialog open={openDialog} onClose={closeDialog} onConfirm={handleOnDelete} itemName={user?.name} />
       <ToastContainer />
     </div>
-  );
+  )
 }

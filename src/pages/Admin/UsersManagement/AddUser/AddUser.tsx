@@ -39,22 +39,19 @@ export default function AddUser() {
         role: '',
     })
     useEffect(() => {
-        console.log("success: " + success + " error: " + error)
-        if (success && error !== '') {
-            console.log("success222: " + success + " error22: " + error)
-            toast.success(error)
-            dispatch(resetState())
-            // setTimeout(() => {
-                back()
-            // }, 1000)
-        } else if (error !== '') {
-            toast.error(error)
+        if (error) {
+            if (success) {
+                toast.success(error)
+                dispatch(resetState())
+                // back()
+            } else
+                toast.error(error)
         }
-    }, [error, success])
+    }, [error])
 
-    const back = () => {
-        window.history.back()
-    }
+    // const back = () => {
+    //     window.history.back()
+    // }
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target
