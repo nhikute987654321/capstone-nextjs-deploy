@@ -102,30 +102,9 @@ export default function FormUser({ form, setForm, handleChange, handleOnAddNew, 
             />
           </div>
 
-          {/* Ảnh đại diện */}
-          <div className="flex flex-col">
-            <label htmlFor="avatar" className="mb-1 text-sm font-medium text-gray-700">Link ảnh đại diện</label>
-            {/* <div className='flex'>
-              <input
-                id="avatar"
-                name="avatar"
-                value={form.avatar || ''}
-                onChange={handleChange}
-                placeholder="https://example.com/avatar.jpg"
-                disabled={disabled}
-                className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div> */}
-            <input
-              id="avatar"
-              name="avatar"
-              value={form.avatar || ''}
-              onChange={handleChange}
-              placeholder="https://example.com/avatar.jpg"
-              disabled={disabled}
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
+
+
+
 
           {/* Giới tính */}
           <div className="flex flex-col">
@@ -141,6 +120,21 @@ export default function FormUser({ form, setForm, handleChange, handleOnAddNew, 
               <option value="true">Nam</option>
               <option value="false">Nữ</option>
             </select>
+          </div>
+
+          {/* Ảnh đại diện */}
+
+          <div className="flex flex-col ">
+            <label htmlFor="avatar" className="mb-1 text-sm font-medium text-gray-700">Link ảnh đại diện</label>
+            <input
+              id="avatar"
+              name="avatar"
+              value={form.avatar || ''}
+              onChange={handleChange}
+              placeholder="https://example.com/avatar.jpg"
+              disabled={disabled}
+              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
           </div>
 
           {/* Vai trò */}
@@ -159,6 +153,18 @@ export default function FormUser({ form, setForm, handleChange, handleOnAddNew, 
               <option value="USER">USER</option>
             </select>
           </div>
+
+
+          {form?.avatar &&
+            <div className="flex flex-col mb-3 justify-start">
+              <div className="w-[150px] h-[150px] overflow-hidden rounded-full">
+                <img src={form.avatar}
+                  alt={form.avatar}
+                  className="w-full h-full object-cover" />
+              </div>
+            </div>
+          }
+
         </div>
 
         {/* Buttons */}

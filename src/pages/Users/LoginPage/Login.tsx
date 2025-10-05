@@ -35,10 +35,8 @@ function Login() {
     useEffect(() => {
         if (isAuthenticated) {
             const userInfo = localStorage.getItem('auth_user');
-            console.log(userInfo,'userInfo')
             if(userInfo){
                 const user = JSON.parse(userInfo);
-                console.log(user,'data userInfo')
                 if(user?.role == ADMIN){
                     navigate('/admin/rooms');
                     return
