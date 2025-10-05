@@ -138,7 +138,7 @@ export default function BookRoom() {
                             onChange={(e) => {
                                 handleChangeRooms(e)
                             }}
-                            value={room?.id}
+                            // value={room?.id}
                             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                         >
                             <option value="0">-- Chọn phòng --</option>
