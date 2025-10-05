@@ -70,8 +70,6 @@ export default function RoomAdminDetail() {
   const navigate = useNavigate()
 
   const { room, message, success } = useSelector((state: any) => state.admDetailRoom)
-
-
   const { locations } = useSelector((state: any) => state.admLocations)
   
   useEffect(() => {
@@ -138,7 +136,7 @@ export default function RoomAdminDetail() {
   }
 
   const gotoBookRoom = () => {
-    navigate(`/admin/book-room`)//?id=${id}
+    navigate(`/admin/book-room`)
   }
 
   return (

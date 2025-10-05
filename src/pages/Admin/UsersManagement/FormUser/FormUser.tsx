@@ -120,7 +120,7 @@ export default function FormUser({ form, setForm, handleChange, handleOnAddNew, 
 
           {/* Ảnh đại diện */}
 
-          <div className="flex flex-col ">
+          {/* <div className="flex flex-col ">
             <label htmlFor="avatar" className="mb-1 text-sm font-medium text-gray-700">Link ảnh đại diện</label>
             <input
               id="avatar"
@@ -131,7 +131,7 @@ export default function FormUser({ form, setForm, handleChange, handleOnAddNew, 
               disabled={disabled}
               className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             />
-          </div>
+          </div> */}
 
           {/* Vai trò */}
           <div className="flex flex-col">
@@ -151,7 +151,7 @@ export default function FormUser({ form, setForm, handleChange, handleOnAddNew, 
           </div>
 
 
-          {form?.avatar &&
+          {/* {form?.avatar &&
             <div className="flex flex-col mb-3 justify-start">
               <div className="w-[150px] h-[150px] overflow-hidden rounded-full">
                 <img src={form.avatar}
@@ -159,7 +159,7 @@ export default function FormUser({ form, setForm, handleChange, handleOnAddNew, 
                   className="w-full h-full object-cover" />
               </div>
             </div>
-          }
+          } */}
 
         </div>
 
